@@ -1,0 +1,626 @@
+---
+title: "Exploradores del Espacio y la Medida: De las Formas 2D a los Cuerpos 3D"
+subtitle: "Secuencia Didáctica y Cuaderno Interactivo con Manim para Geometría de Grado 6° (Colombia)"
+author: "Plan de Aula Guiado de Matemáticas"
+date: "2026-08-27"
+lang: es
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: true
+    toc-depth: 3
+    toc-title: "Contenido de la Lección"
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    code-summary: "Mostrar / Ocultar Código Manim"
+    smooth-scroll: true
+    highlight-style: github
+jupyter: python3
+execute:
+  warning: false
+  message: false
+---
+
+::: {.callout-note appearance="simple"}
+## 🇨🇴 Referente Curricular Nacional (Ministerio de Educación Nacional de Colombia - MEN)
+Este cuaderno interactivo fue diseñado como guía de clase interactiva para estudiantes de **Grado 6° de Educación Básica Secundaria**. Integra los **Estándares Básicos de Competencias (EBC)** y los **Derechos Básicos de Aprendizaje (DBA)** de Matemáticas:
+
+- **Pensamiento Espacial y Sistemas Geométricos:** Localización en sistemas de referencia, transformaciones en el plano (isometrías) y relaciones bidimensionales y tridimensionales.
+- **Pensamiento Métrico y Sistemas de Medidas:** Diferenciación conceptual y operativa de atributos medibles (longitud y área) y sus unidades correspondientes en el Sistema Internacional.
+:::
+
+---
+
+# Ficha Técnica y Objetivos de Aprendizaje
+
+```{=html}
+<div style="background: rgba(0, 210, 255, 0.08); border-left: 5px solid #00D2FF; padding: 16px; border-radius: 6px; margin-bottom: 24px;">
+  <h3 style="margin-top: 0; color: #0088cc;">🎯 Matriz de Competencias y Evidencias de Aprendizaje</h3>
+  <table style="width: 100%; border-collapse: collapse; font-size: 0.95em;">
+    <thead>
+      <tr style="border-bottom: 2px solid #00D2FF; text-align: left;">
+        <th style="padding: 8px;">Competencia</th>
+        <th style="padding: 8px;">Evidencias de Aprendizaje</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+        <td style="padding: 8px; font-weight: bold; vertical-align: top;">
+          1. Reconoce las características medibles y de posición de objetos bidimensionales y de movimientos simples de estos: rotación, traslación y reflexión.
+        </td>
+        <td style="padding: 8px; vertical-align: top;">
+          ✅ <strong>Evidencia 1.1:</strong> Señala los atributos medibles de una figura junto con sus posibles unidades y magnitudes.
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; font-weight: bold; vertical-align: top;">
+          2. Reconoce características de objetos geométricos y métricos.
+        </td>
+        <td style="padding: 8px; vertical-align: top;">
+          ✅ <strong>Evidencia 2.1:</strong> Identifico relaciones entre figuras bidimensionales y tridimensionales.<br>
+          ✅ <strong>Evidencia 2.2:</strong> Utilizo sistemas de referencia para representar la ubicación de objetos geométricos.<br>
+          ✅ <strong>Evidencia 2.3:</strong> Reconozco el conjunto de unidades usadas para cada magnitud: longitud y área.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+---
+
+# Situación Problema: El Taller del Diseñador y Arquitecto
+
+Imagina que eres parte del equipo encargado de diseñar el nuevo parque recreativo y el centro cultural de tu municipio. Para lograrlo, debes responder cuatro preguntas fundamentales:
+
+1. **¿Dónde ubicamos cada atracción y monumento?** $\rightarrow$ Necesitamos un **sistema de referencia y coordenadas**.
+2. **¿Cómo repetimos y orientamos los patrones de los pisos y baldosas coloniales sin deformarlos?** $\rightarrow$ Aplicamos **movimientos rígidos en el plano (traslación, rotación y reflexión)**.
+3. **¿Cuánta cinta se necesita para acordonar el terreno y cuántos metros cuadrados de césped debemos sembrar?** $\rightarrow$ Diferenciamos **longitud (perímetro) de superficie (área)** y sus unidades de medida.
+4. **¿Cómo transformamos los planos dibujados en una hoja de papel (2D) en las cajas de empaque y quioscos reales (3D)?** $\rightarrow$ Comprendemos los **desarrollos planos de cuerpos geométricos**.
+
+¡Acompáñanos a explorar estos conceptos mediante animaciones matemáticas interactivas!
+
+---
+
+# Módulo 1: Sistemas de Referencia y Coordenadas en el Plano Cartesiano
+
+> **Evidencia trabajada:** *2.2 Utilizo sistemas de referencia para representar la ubicación de objetos geométricos.*
+
+## Conceptos Clave
+
+El **plano cartesiano** está formado por dos rectas numéricas perpendiculares que se cortan en un punto llamado **origen** $(0, 0)$:
+
+- **Eje horizontal ($X$ o eje de las abscisas):** Valores positivos a la derecha, negativos a la izquierda.
+- **Eje vertical ($Y$ o eje de las ordenadas):** Valores positivos hacia arriba, negativos hacia abajo.
+- **Par ordenado $(x, y)$:** La primera componente $x$ indica el desplazamiento horizontal; la segunda componente $y$ indica el desplazamiento vertical.
+- **Polígonos 2D:** Se definen conectando una secuencia de puntos coordenados (vértices) mediante segmentos de recta (lados).
+
+## Animación Interactiva con Manim
+
+La siguiente animación ilustra cómo se construye la cuadrícula cartesiana, cómo se localizan los puntos $A(2, 2)$, $B(-3, 1)$, $C(-2, -2)$ y $D(3, -1)$ mediante líneas de proyección, y cómo se genera una figura bidimensional.
+
+```{python}
+#| label: anim-plano-cartesiano
+#| echo: true
+#| fig-align: center
+
+from manim import *
+import numpy as np
+
+class PlanoCartesianoYPosicion(Scene):
+    def construct(self):
+        # 1. Título
+        titulo = Text("1. Sistema de Referencia: El Plano Cartesiano", font_size=30, color="#00D2FF")
+        subtitulo = Text("Ubicación de puntos y figuras 2D mediante pares ordenados (x, y)", font_size=18, color="#FFD166")
+        cabecera = VGroup(titulo, subtitulo).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UL, buff=0.4)
+        self.play(Write(titulo), FadeIn(subtitulo), run_time=1.0)
+
+        # 2. Cuadrícula y ejes
+        plano = NumberPlane(
+            x_range=[-5, 5, 1],
+            y_range=[-3, 3, 1],
+            x_length=8.5,
+            y_length=5.1,
+            background_line_style={"stroke_color": "#2A364F", "stroke_width": 1.5},
+            axis_config={"stroke_color": "#8D99AE", "stroke_width": 2.5, "include_numbers": True, "font_size": 18}
+        ).shift(DOWN * 0.4 + RIGHT * 0.5)
+
+        etiqueta_x = MathTex("X", color="#00D2FF", font_size=24).next_to(plano.x_axis.get_end(), RIGHT, buff=0.15)
+        etiqueta_y = MathTex("Y", color="#00D2FF", font_size=24).next_to(plano.y_axis.get_end(), UP, buff=0.15)
+        self.play(Create(plano), Write(etiqueta_x), Write(etiqueta_y), run_time=1.2)
+
+        # 3. Origen
+        origen_punto = Dot(plano.c2p(0, 0), color="#FFD166", radius=0.08)
+        origen_texto = Text("Origen (0, 0)", font_size=16, color="#FFD166").next_to(origen_punto, DL, buff=0.12)
+        self.play(FadeIn(origen_punto), Write(origen_texto), run_time=0.6)
+
+        # 4. Puntos y líneas de proyección
+        coords = [
+            ("A", 2, 2, "#FF6B6B"),
+            ("B", -3, 1, "#06D6A0"),
+            ("C", -2, -2, "#FFD166"),
+            ("D", 3, -1, "#00D2FF")
+        ]
+
+        puntos_dots, puntos_labels, lineas_guias = [], [], []
+        for nom, x, y, col in coords:
+            pos = plano.c2p(x, y)
+            dot = Dot(pos, color=col, radius=0.09)
+            lbl = MathTex(f"{nom}({x}, {y})", font_size=20, color=col).next_to(dot, UR if x>=0 else UL, buff=0.12)
+            guia = VGroup(
+                DashedLine(plano.c2p(x, 0), pos, color=col, stroke_width=1.5, stroke_opacity=0.7),
+                DashedLine(plano.c2p(0, y), pos, color=col, stroke_width=1.5, stroke_opacity=0.7)
+            )
+            puntos_dots.append(dot)
+            puntos_labels.append(lbl)
+            lineas_guias.append(guia)
+
+        for dot, lbl, guia in zip(puntos_dots, puntos_labels, lineas_guias):
+            self.play(Create(guia), FadeIn(dot, scale=1.3), Write(lbl), run_time=0.6)
+
+        # 5. Polígono formado por los vértices
+        vertices = [plano.c2p(x, y) for _, x, y, _ in coords]
+        poligono = Polygon(*vertices, color="#FFD166", stroke_width=3.5, fill_color="#FFD166", fill_opacity=0.25)
+        lbl_fig = Text("Polígono 2D (4 vértices conectados)", font_size=18, color="#FFD166").to_corner(DL, buff=0.4)
+        self.play(Create(poligono), Write(lbl_fig), run_time=1.2)
+        self.wait(1.0)
+```
+
+::: {.callout-tip}
+## 💡 Micro-Reto en Clase 1
+Un barco pesquero zarpa desde el puerto ubicado en $P(0, 0)$. Navega **4 unidades hacia el este (derecha)** y luego **3 unidades hacia el sur (abajo)**.
+1. ¿Cuáles son las coordenadas finales del barco?
+2. Si un faro está en $F(-2, 3)$, ¿en qué cuadrante del plano se encuentra ubicado el faro?
+
+::: {.callout-note collapse="true"}
+### Solución
+1. Coordenadas finales del barco: $(+4, -3)$ (Cuadrante IV).
+2. El faro en $F(-2, 3)$ tiene $x$ negativa e $y$ positiva, por lo que está en el **Cuadrante II**.
+:::
+:::
+
+---
+
+# Módulo 2: Movimientos Rígidos en el Plano (Isometrías)
+
+> **Competencia trabajada:** *1. Reconoce las características medibles y de posición de objetos bidimensionales y de movimientos simples de estos: rotación, traslación y reflexión.*
+
+Un **movimiento rígido o isometría** es una transformación geométrica que cambia la posición u orientación de una figura en el plano, pero **mantiene invariantes sus distancias, ángulos, perímetro y área**.
+
+```{=html}
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0;">
+  <div style="background: rgba(6, 214, 160, 0.1); border: 2px solid #06D6A0; border-radius: 8px; padding: 14px;">
+    <h4 style="color: #06D6A0; margin-top: 0;">➡️ 1. Traslación</h4>
+    <p>Desplaza todos los puntos de la figura en una misma <strong>dirección, sentido y distancia</strong>, determinada por un <strong>vector de desplazamiento</strong> \(\vec{v} = (a, b)\).</p>
+    <p><em>No cambia la orientación ni el tamaño.</em></p>
+  </div>
+  <div style="background: rgba(255, 209, 102, 0.1); border: 2px solid #FFD166; border-radius: 8px; padding: 14px;">
+    <h4 style="color: #FFD166; margin-top: 0;">🔄 2. Rotación</h4>
+    <p>Gira la figura alrededor de un <strong>centro de rotación</strong> \(O\) un determinado <strong>ángulo de giro</strong> (\(\theta^\circ\)).</p>
+    <p><em>Sentido positivo: antihorario (contrario a las manecillas del reloj).</em></p>
+  </div>
+  <div style="background: rgba(255, 107, 107, 0.1); border: 2px solid #FF6B6B; border-radius: 8px; padding: 14px;">
+    <h4 style="color: #FF6B6B; margin-top: 0;">🪞 3. Reflexión (Simetría Axial)</h4>
+    <p>Invierte la figura con respecto a una recta llamada <strong>eje de simetría (espejo)</strong>.</p>
+    <p><em>Cada punto y su imagen están a la misma distancia del eje. Cambia el sentido de orientación.</em></p>
+  </div>
+</div>
+```
+
+## Animación Interactiva con Manim: Los Tres Movimientos
+
+```{python}
+#| label: anim-transformaciones
+#| echo: true
+#| fig-align: center
+
+class TransformacionesIsometricas(Scene):
+    def construct(self):
+        titulo = Text("2. Movimientos Rígidos en el Plano", font_size=30, color="#00D2FF")
+        subtitulo = Text("Conservan las medidas, forma y área exacta de la figura", font_size=18, color="#A0AABF")
+        cabecera = VGroup(titulo, subtitulo).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
+        self.play(Write(titulo), FadeIn(subtitulo), run_time=1.0)
+
+        plano = NumberPlane(
+            x_range=[-6, 6, 1], y_range=[-3.5, 3.5, 1],
+            x_length=11.5, y_length=5.5,
+            background_line_style={"stroke_color": "#1F293D", "stroke_width": 1.2}
+        ).shift(DOWN * 0.4)
+        self.play(Create(plano), run_time=0.8)
+
+        # Figura Original
+        p1, p2, p3 = plano.c2p(-4, -1), plano.c2p(-2, -1), plano.c2p(-2.5, 1)
+        triangulo_orig = Polygon(p1, p2, p3, color="#00D2FF", fill_color="#00D2FF", fill_opacity=0.4, stroke_width=3)
+        lbl_orig = Text("Original", font_size=16, color="#00D2FF").next_to(triangulo_orig, DOWN, buff=0.15)
+        self.play(Create(triangulo_orig), Write(lbl_orig), run_time=0.8)
+
+        # A) Traslación
+        banner_trans = Text("A) TRASLACIÓN: Vector (+3, +1)", font_size=20, color="#06D6A0").to_corner(UR, buff=0.4)
+        flecha_v = Arrow(plano.c2p(-4, -1), plano.c2p(-1, 0), color="#06D6A0", buff=0, stroke_width=3)
+        triangulo_tras = triangulo_orig.copy().set_color("#06D6A0").set_fill("#06D6A0", opacity=0.4)
+        
+        self.play(Write(banner_trans), Create(flecha_v))
+        self.play(triangulo_tras.animate.shift(plano.c2p(3, 1) - plano.c2p(0, 0)), run_time=1.2)
+        self.wait(0.5)
+        self.play(FadeOut(flecha_v), FadeOut(triangulo_tras), FadeOut(banner_trans), run_time=0.5)
+
+        # B) Rotación
+        banner_rot = Text("B) ROTACIÓN: 90° alrededor del Origen", font_size=20, color="#FFD166").to_corner(UR, buff=0.4)
+        centro = Dot(plano.c2p(0, 0), color="#FFD166", radius=0.08)
+        triangulo_rot = triangulo_orig.copy().set_color("#FFD166").set_fill("#FFD166", opacity=0.4)
+        
+        self.play(Write(banner_rot), FadeIn(centro))
+        self.play(Rotate(triangulo_rot, angle=PI/2, about_point=plano.c2p(0, 0)), run_time=1.5)
+        self.wait(0.5)
+        self.play(FadeOut(centro), FadeOut(triangulo_rot), FadeOut(banner_rot), run_time=0.5)
+
+        # C) Reflexión
+        banner_ref = Text("C) REFLEXIÓN: Simetría axial (Eje Y)", font_size=20, color="#FF6B6B").to_corner(UR, buff=0.4)
+        eje_espejo = Line(plano.c2p(0, -3), plano.c2p(0, 3), color="#FF6B6B", stroke_width=3.5)
+        p1_r, p2_r, p3_r = plano.c2p(4, -1), plano.c2p(2, -1), plano.c2p(2.5, 1)
+        triangulo_ref = Polygon(p1_r, p2_r, p3_r, color="#FF6B6B", fill_color="#FF6B6B", fill_opacity=0.4, stroke_width=3)
+        
+        self.play(Write(banner_ref), Create(eje_espejo))
+        self.play(TransformFromCopy(triangulo_orig, triangulo_ref), run_time=1.5)
+        self.wait(1.0)
+```
+
+::: {.callout-tip}
+## 💡 Micro-Reto en Clase 2
+Si un triángulo tiene vértices en $A(1, 2)$, $B(3, 2)$ y $C(1, 5)$:
+1. ¿Cuáles serán los nuevos vértices tras aplicar una **traslación** con vector $\vec{v} = (+2, -3)$?
+2. ¿Qué ocurre con la longitud de los lados y el área del triángulo después de ser rotado $180^\circ$?
+
+::: {.callout-note collapse="true"}
+### Solución
+1. Sumamos $(+2, -3)$ a cada coordenada:
+   - $A'(1+2, 2-3) = (3, -1)$
+   - $B'(3+2, 2-3) = (5, -1)$
+   - $C'(1+2, 5-3) = (3, 2)$
+2. **Las longitudes de los lados y el área permanecen exactamente iguales**, porque la rotación es una transformación isométrica (conserva distancias y ángulos).
+:::
+:::
+
+---
+
+# Módulo 3: Atributos Medibles: Longitud (Perímetro) vs Área (Superficie)
+
+> **Evidencias trabajadas:**
+> - *1.1 Señala los atributos medibles de una figura junto con sus posibles unidades y magnitudes.*
+> - *2.3 Reconozco el conjunto de unidades usadas para cada magnitud: longitud y área.*
+
+Uno de los errores más frecuentes en matemáticas escolares es confundir el **perímetro** con el **área**. Analicemos sus diferencias fundamentales:
+
+```{=html}
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95em;">
+  <thead>
+    <tr style="background: rgba(0, 210, 255, 0.15); border-bottom: 2px solid #00D2FF;">
+      <th style="padding: 10px; text-align: left;">Característica</th>
+      <th style="padding: 10px; text-align: left; color: #06D6A0;">Longitud / Perímetro (\(1\text{D}\))</th>
+      <th style="padding: 10px; text-align: left; color: #FFD166;">Área / Superficie (\(2\text{D}\))</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <td style="padding: 10px; font-weight: bold;">¿Qué mide?</td>
+      <td style="padding: 10px;">La longitud del <strong>contorno o borde</strong> exterior.</td>
+      <td style="padding: 10px;">La cantidad de <strong>espacio o superficie interior</strong> que cubre la figura.</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <td style="padding: 10px; font-weight: bold;">Dimensión</td>
+      <td style="padding: 10px;"><strong>Unidimensional (1D)</strong> (como una cuerda o hilo).</td>
+      <td style="padding: 10px;"><strong>Bidimensional (2D)</strong> (como baldosas o pintura).</td>
+    </tr>
+    <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+      <td style="padding: 10px; font-weight: bold;">Unidades en el SI</td>
+      <td style="padding: 10px;">Milímetros (\(\text{mm}\)), Centímetros (\(\text{cm}\)), Metros (\(\text{m}\)), Kilómetros (\(\text{km}\)).</td>
+      <td style="padding: 10px;">Milímetros cuadrados (\(\text{mm}^2\)), Centímetros cuadrados (\(\text{cm}^2\)), Metros cuadrados (\(\text{m}^2\)), Hectáreas (\(\text{ha}\)).</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; font-weight: bold;">Ejemplo en la vida real</td>
+      <td style="padding: 10px;">La cerca de alambre para rodear una finca cafetera.</td>
+      <td style="padding: 10px;">La cantidad de pasto que cubre el campo de fútbol.</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+## Animación Interactiva con Manim: Desenrollar Contorno vs Llenar Superficie
+
+```{python}
+#| label: anim-longitud-area
+#| echo: true
+#| fig-align: center
+
+class LongitudVsArea(Scene):
+    def construct(self):
+        titulo = Text("3. Atributos Medibles: Longitud (1D) vs Área (2D)", font_size=30, color="#00D2FF")
+        subtitulo = Text("Perímetro = Contorno desenrollado | Área = Cuadrículas interiores", font_size=18, color="#FFD166")
+        cabecera = VGroup(titulo, subtitulo).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UL, buff=0.35)
+        self.play(Write(titulo), FadeIn(subtitulo), run_time=1.0)
+
+        # Rectángulo 4m x 3m
+        w, h = 4.0 * 0.75, 3.0 * 0.75
+        rect = Rectangle(width=w, height=h, color="#00D2FF", stroke_width=4).shift(UP * 0.2 + LEFT * 3.0)
+        
+        lbl_top = MathTex("4\\text{ m}", font_size=20, color="#00D2FF").next_to(rect, UP, buff=0.12)
+        lbl_bot = MathTex("4\\text{ m}", font_size=20, color="#00D2FF").next_to(rect, DOWN, buff=0.12)
+        lbl_izq = MathTex("3\\text{ m}", font_size=20, color="#00D2FF").next_to(rect, LEFT, buff=0.12)
+        lbl_der = MathTex("3\\text{ m}", font_size=20, color="#00D2FF").next_to(rect, RIGHT, buff=0.12)
+        self.play(Create(rect), Write(VGroup(lbl_top, lbl_bot, lbl_izq, lbl_der)), run_time=1.0)
+
+        # A) Perímetro
+        tit_perim = Text("A) PERÍMETRO (Longitud - 1D)", font_size=20, color="#06D6A0").to_corner(UR, buff=0.4)
+        form_perim = MathTex(r"P = 4 + 3 + 4 + 3 = 14\text{ m}", font_size=22, color="#06D6A0").next_to(tit_perim, DOWN, aligned_edge=LEFT, buff=0.2)
+        self.play(Write(tit_perim), Write(form_perim), run_time=1.0)
+
+        # Desplegar en línea recta
+        linea_recta = Line(LEFT * 5.0, RIGHT * 2.0, color="#06D6A0", stroke_width=5).to_edge(DOWN, buff=0.8)
+        lbl_lin = MathTex(r"\text{Línea recta continua: } 14\text{ metros}", font_size=20, color="#06D6A0").next_to(linea_recta, UP, buff=0.1)
+        self.play(Create(linea_recta), Write(lbl_lin), run_time=1.2)
+
+        # B) Área
+        tit_area = Text("B) ÁREA (Superficie - 2D)", font_size=20, color="#FFD166").next_to(form_perim, DOWN, aligned_edge=LEFT, buff=0.4)
+        form_area = MathTex(r"A = 4\text{ m} \times 3\text{ m} = 12\text{ m}^2", font_size=22, color="#FFD166").next_to(tit_area, DOWN, aligned_edge=LEFT, buff=0.2)
+        self.play(Write(tit_area), Write(form_area), run_time=1.0)
+
+        # Llenar con 12 cuadritos
+        dx, dy = w / 4.0, h / 3.0
+        tl = rect.get_corner(UL)
+        bl = rect.get_corner(DL)
+        cuadritos = VGroup()
+        for i in range(4):
+            for j in range(3):
+                c = Square(side_length=min(dx, dy)*0.95, fill_color="#FFD166", fill_opacity=0.5, stroke_color="#FFD166", stroke_width=1.5)
+                c.move_to([tl[0] + (i + 0.5)*dx, bl[1] + (j + 0.5)*dy, 0])
+                cuadritos.add(c)
+
+        self.play(LaggedStart(*[FadeIn(c, scale=0.3) for c in cuadritos], lag_ratio=0.06), run_time=1.5)
+        self.wait(1.0)
+```
+
+::: {.callout-tip}
+## 💡 Micro-Reto en Clase 3: El Error del Pintor
+Un maestro de obra cobra $\$12.000$ pesos por cada **metro lineal** de guardaescoba (zócalo) instalado y $\$25.000$ pesos por cada **metro cuadrado** de pintura en la pared.
+Si una pared rectangular mide $5\text{ m}$ de base por $3\text{ m}$ de altura:
+1. ¿Cuál es el costo del guardaescoba en la base de la pared ($5\text{ m}$)?
+2. ¿Cuál es el costo de pintar toda la superficie de la pared?
+3. ¿Por qué sería un grave error sumar directamente $5\text{ m} + 15\text{ m}^2$?
+
+::: {.callout-note collapse="true"}
+### Solución
+1. **Guardaescoba (Longitud):** $5\text{ m} \times \$12.000 = \$60.000$ pesos.
+2. **Pintura (Área):** Área $= 5\text{ m} \times 3\text{ m} = 15\text{ m}^2$. Costo $= 15\text{ m}^2 \times \$25.000 = \$375.000$ pesos.
+3. **Explicación dimensional:** No se pueden sumar porque representan **magnitudes físicas de diferente dimensión** (la longitud es $1\text{D}$ y el área es $2\text{D}$). Es como intentar sumar peras con metros de tela.
+:::
+:::
+
+---
+
+# Módulo 4: Relaciones entre Figuras 2D y Sólidos 3D
+
+> **Evidencia trabajada:** *2.1 Identifico relaciones entre figuras bidimensionales y tridimensionales.*
+
+Todo objeto tridimensional (que ocupa un volumen en el espacio: alto, ancho y profundidad) está delimitado por **superficies bidimensionales (caras)**.
+
+- **Poliedros:** Sólidos limitados únicamente por polígonos planos (prismas, pirámides, cubos).
+- **Cuerpos redondos:** Sólidos que tienen al menos una superficie curva (cilindro, cono, esfera).
+- **Desarrollo Plano (Red):** Plantilla plana en dos dimensiones ($2\text{D}$) que, al ser recortada y plegada por sus aristas, reconstruye exactamente el cuerpo tridimensional ($3\text{D}$).
+
+```{=html}
+<div style="background: rgba(155, 93, 229, 0.1); border: 2px solid #9B5DE5; border-radius: 8px; padding: 16px; margin: 20px 0;">
+  <h4 style="color: #9B5DE5; margin-top: 0;">📐 Elementos Clave de los Poliedros</h4>
+  <ul>
+    <li><strong>Caras (2D):</strong> Polígonos planos que limitan el cuerpo (cuadrados, triángulos, rectángulos).</li>
+    <li><strong>Aristas (1D):</strong> Segmentos de recta donde se unen dos caras contiguas.</li>
+    <li><strong>Vértices (0D):</strong> Puntos de intersección donde se encuentran tres o más aristas.</li>
+    <li><strong>Fórmula de Euler para Poliedros Convexos:</strong> \(\text{Caras} + \text{Vértices} - \text{Aristas} = 2\) (\(C + V - A = 2\)).</li>
+  </ul>
+</div>
+```
+
+## Animación Interactiva con Manim: Plegado 2D a Sólido 3D
+
+```{python}
+#| label: anim-2d-a-3d
+#| echo: true
+#| fig-align: center
+
+class De2Da3DDesdoblamiento(ThreeDScene):
+    def construct(self):
+        titulo = Text("4. Relación 2D y 3D: Desarrollo Plano a Sólido", font_size=30, color="#00D2FF")
+        subtitulo = Text("Una red 2D de 6 cuadrados se pliega para formar un Cubo (3D)", font_size=18, color="#FFD166")
+        cabecera = VGroup(titulo, subtitulo).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
+        self.add_fixed_in_frame_mobjects(cabecera)
+        self.play(Write(titulo), FadeIn(subtitulo), run_time=1.0)
+
+        # Red 2D en cruz latina
+        L = 1.5
+        colores = ["#00D2FF", "#FF6B6B", "#06D6A0", "#FFD166", "#9B5DE5", "#F15BB5"]
+        nombres = ["Base", "Frente", "Atrás", "Izq", "Der", "Tapa"]
+        posiciones_2d = [[0, 0, 0], [0, -L, 0], [0, L, 0], [-L, 0, 0], [L, 0, 0], [0, 2*L, 0]]
+
+        caras_2d = VGroup()
+        for pos, col, nom in zip(posiciones_2d, colores, nombres):
+            sq = Square(side_length=L, fill_color=col, fill_opacity=0.6, stroke_color=WHITE, stroke_width=2.5).move_to(pos)
+            lbl = Text(nom, font_size=14, color=WHITE).move_to(sq.get_center())
+            caras_2d.add(VGroup(sq, lbl))
+
+        caras_2d.shift(DOWN * 0.5 + LEFT * 1.5)
+        banner_2d = Text("Red 2D (Plantilla plana de 6 caras)", font_size=20, color=WHITE).to_corner(UR, buff=0.5)
+        self.add_fixed_in_frame_mobjects(banner_2d)
+
+        self.play(LaggedStart(*[FadeIn(c, scale=0.8) for c in caras_2d], lag_ratio=0.12), Write(banner_2d), run_time=1.5)
+        self.wait(0.5)
+        self.play(FadeOut(banner_2d), run_time=0.4)
+
+        # Transición a cámara 3D
+        self.move_camera(phi=65 * DEGREES, theta=-45 * DEGREES, zoom=0.85, run_time=1.5)
+
+        # Cubo 3D
+        cubo_3d = VGroup(
+            Square(side_length=L, fill_color=colores[0], fill_opacity=0.7, stroke_color=WHITE).move_to([0, 0, -L/2]),
+            Square(side_length=L, fill_color=colores[1], fill_opacity=0.7, stroke_color=WHITE).rotate(PI/2, axis=RIGHT).move_to([0, -L/2, 0]),
+            Square(side_length=L, fill_color=colores[2], fill_opacity=0.7, stroke_color=WHITE).rotate(PI/2, axis=RIGHT).move_to([0, L/2, 0]),
+            Square(side_length=L, fill_color=colores[3], fill_opacity=0.7, stroke_color=WHITE).rotate(PI/2, axis=UP).move_to([-L/2, 0, 0]),
+            Square(side_length=L, fill_color=colores[4], fill_opacity=0.7, stroke_color=WHITE).rotate(PI/2, axis=UP).move_to([L/2, 0, 0]),
+            Square(side_length=L, fill_color=colores[5], fill_opacity=0.7, stroke_color=WHITE).move_to([0, 0, L/2])
+        ).shift(RIGHT * 1.0)
+
+        banner_3d = Text("Sólido 3D Plegado (Cubo)", font_size=20, color="#06D6A0").to_corner(UR, buff=0.5)
+        self.add_fixed_in_frame_mobjects(banner_3d)
+
+        self.play(ReplacementTransform(caras_2d, cubo_3d), Write(banner_3d), run_time=2.0)
+        self.begin_ambient_camera_rotation(rate=0.4)
+        self.wait(2.5)
+        self.stop_ambient_camera_rotation()
+```
+
+---
+
+# Taller Práctico: Desafíos del "Detective Geométrico"
+
+Realiza los siguientes cuatro retos en tu cuaderno o en grupos de trabajo cooperativo.
+
+## Reto 1: La Nave Perdida (Coordenadas y Posición)
+Una nave espacial inicia su viaje en $S(-4, 3)$. 
+- Realiza una traslación con vector $\vec{v} = (+6, -2)$.
+- Luego realiza una segunda traslación con vector $\vec{w} = (-1, -3)$.
+
+**Preguntas:**
+1. ¿Cuáles son las coordenadas intermedias y finales de la nave?
+2. ¿En qué cuadrante aterriza finalmente?
+
+::: {.callout-note collapse="true"}
+### Solución Reto 1
+- **Posición intermedia:** $(-4 + 6, 3 - 2) = (2, 1)$ (Cuadrante I).
+- **Posición final:** $(2 - 1, 1 - 3) = (1, -2)$ (Cuadrante IV).
+:::
+
+## Reto 2: El Empaque de Café Colombiano (2D a 3D)
+Una cooperativa de café de Manizales desea diseñar una caja con forma de **prisma triangular recto**. La base de la caja es un triángulo equilátero de lados $6\text{ cm}$ y la altura de la caja es de $10\text{ cm}$.
+
+**Preguntas:**
+1. ¿Cuántas caras bidimensionales componen el desarrollo plano de esta caja y qué formas tienen?
+2. ¿Cuántos vértices y cuántas aristas tiene el prisma ensamblado? Verifica con la fórmula de Euler $C + V - A = 2$.
+
+::: {.callout-note collapse="true"}
+### Solución Reto 2
+1. **Caras 2D:** 5 caras en total:
+   - 2 triángulos equiláteros de $6\text{ cm}$ de lado (bases superior e inferior).
+   - 3 rectángulos de $6\text{ cm} \times 10\text{ cm}$ (caras laterales).
+2. **Elementos del prisma:**
+   - Caras $C = 5$
+   - Vértices $V = 6$
+   - Aristas $A = 9$
+   - Verificación de Euler: $5 + 6 - 9 = 2$ ✅.
+:::
+
+## Reto 3: Remodelación de la Cancha de Microfútbol (Perímetro vs Área)
+La cancha de microfútbol del colegio mide $28\text{ metros}$ de largo por $15\text{ metros}$ de ancho.
+
+**Preguntas:**
+1. Si se va a pintar una línea blanca por todo el contorno de la cancha, ¿cuántos metros lineales de pintura se deben trazar?
+2. Si se va a impermeabilizar toda la superficie de la cancha con pintura antideslizante, ¿cuántos metros cuadrados se van a cubrir?
+3. Si cada galón de pintura rinde para $20\text{ m}^2$, ¿cuántos galones completos se deben comprar?
+
+::: {.callout-note collapse="true"}
+### Solución Reto 3
+1. **Perímetro (Longitud):** $P = 2 \times (28 + 15) = 2 \times 43 = 86\text{ metros}$.
+2. **Área (Superficie):** $A = 28\text{ m} \times 15\text{ m} = 420\text{ m}^2$.
+3. **Galones necesarios:** $420 \div 20 = 21\text{ galones completos}$.
+:::
+
+---
+
+# Evaluación Formativa: Preguntas Tipo ICFES Saber 6°
+
+::: {.callout-important}
+## 📝 Instrucciones
+Selecciona la opción correcta para cada una de las siguientes preguntas de contexto. Analiza la justificación conceptual de cada distractor.
+:::
+
+### Pregunta 1 (Competencia 1 - Movimientos en el plano)
+Al polígono $P$ con vértices en el Cuadrante I se le aplica una **reflexión** respecto al eje vertical $Y$. Si el vértice original es $(3, 4)$, ¿cuáles son las coordenadas del vértice reflejado?
+
+- [ ] A) $(3, -4)$
+- [x] B) $(-3, 4)$
+- [ ] C) $(-3, -4)$
+- [ ] D) $(4, 3)$
+
+*Justificación pedagógica:* En una reflexión respecto al eje $Y$, la ordenada $y$ permanece constante mientras la abscisa $x$ cambia de signo ($x \rightarrow -x$), resultando en $(-3, 4)$. La opción A corresponde a reflexión sobre el eje $X$; la C a una rotación de $180^\circ$ o simetría central; la D a una reflexión respecto a la recta $y = x$.
+
+---
+
+### Pregunta 2 (Competencia 2 - Atributos Medibles y Unidades)
+Un estudiante afirma: *"El perímetro del salón es de $24\text{ m}^2$ y su área es de $32\text{ m}$"*. ¿Cuál es el error conceptual cometido por el estudiante?
+
+- [ ] A) Los cálculos numéricos son incorrectos.
+- [ ] B) El perímetro siempre debe ser numéricamente mayor que el área.
+- [x] C) Intercambió las unidades: el perímetro se mide en unidades lineales ($\text{m}$) y el área en unidades cuadradas ($\text{m}^2$).
+- [ ] D) En un salón de clases no es posible medir el área.
+
+*Justificación pedagógica:* El perímetro es una magnitud unidimensional ($1\text{D}$) y debe expresarse en metros ($\text{m}$). El área mide el recubrimiento bidimensional ($2\text{D}$) y debe expresarse en metros cuadrados ($\text{m}^2$).
+
+---
+
+### Pregunta 3 (Competencia 2 - Relación 2D y 3D)
+¿Cuál de los siguientes desarrollos planos permite construir una **pirámide de base cuadrada**?
+
+- [ ] A) 6 cuadrados congruentes unidos en cruz.
+- [x] B) 1 cuadrado central rodeado por 4 triángulos isósceles en sus lados.
+- [ ] C) 2 círculos y 1 rectángulo.
+- [ ] D) 2 triángulos y 3 rectángulos.
+
+*Justificación pedagógica:* La pirámide cuadrangular tiene como base 1 cuadrado ($2\text{D}$) y 4 caras laterales triangulares que convergen en un único vértice superior. La opción A corresponde a un cubo; la C a un cilindro; la D a un prisma triangular.
+
+---
+
+# Rúbrica de Evaluación Analítica (Decreto 1290 de Colombia)
+
+```{=html}
+<table style="width: 100%; border-collapse: collapse; font-size: 0.9em; margin-top: 20px;">
+  <thead>
+    <tr style="background: #2A364F; color: white;">
+      <th style="padding: 10px; border: 1px solid #445;">Criterio / Evidencia</th>
+      <th style="padding: 10px; border: 1px solid #445; background: #c0392b;">Bajo (1.0 - 2.9)</th>
+      <th style="padding: 10px; border: 1px solid #445; background: #d35400;">Básico (3.0 - 3.9)</th>
+      <th style="padding: 10px; border: 1px solid #445; background: #27ae60;">Alto (4.0 - 4.5)</th>
+      <th style="padding: 10px; border: 1px solid #445; background: #2980b9;">Superior (4.6 - 5.0)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Sistemas de Referencia (Plano Cartesiano)</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Confunde los ejes X e Y y no logra ubicar pares ordenados.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Ubica puntos positivos en el Cuadrante I con ayuda, pero comete errores con signos negativos.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Ubica y lee correctamente pares ordenados en los cuatro cuadrantes y traza polígonos.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Modela situaciones complejas de ubicación y trayectoria en el plano justificando sus coordenadas.</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Movimientos en el Plano (Isometrías)</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">No distingue entre traslación, rotación y reflexión; altera el tamaño de las figuras.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Identifica visualmente los movimientos pero le cuesta aplicar vectores o ángulos numéricos.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Aplica con precisión traslaciones, rotaciones y reflexiones manteniendo la congruencia de la figura.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Compone secuencias de transformaciones y demuestra formalmente la invariancia de medidas y área.</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Atributos Medibles (Longitud vs Área)</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Confunde perímetro con área y asigna unidades incorrectas (\(\text{m}\) vs \(\text{m}^2\)).</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Calcula perímetros y áreas en figuras básicas pero requiere apoyo para diferenciar sus unidades.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Distingue con claridad las magnitudes 1D y 2D, utilizando unidades apropiadas del SI.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Resuelve problemas contextualizados de optimización, costos y descomposición de áreas compuestas.</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Relación 2D y 3D (Desarrollos Planos)</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">No reconoce la relación entre una red plana y su correspondiente sólido tridimensional.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Reconoce el desarrollo plano del cubo pero se le dificultan prismas y pirámides.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Asocia correctamente redes 2D con diversos sólidos 3D identificando caras, aristas y vértices.</td>
+      <td style="padding: 8px; border: 1px solid #ddd;">Diseña y construye plantillas 2D originales para cualquier sólido y aplica la fórmula de Euler.</td>
+    </tr>
+  </tbody>
+</table>
+```
