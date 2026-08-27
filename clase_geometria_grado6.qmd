@@ -81,8 +81,6 @@ Imagina que eres parte del equipo encargado de diseñar el nuevo parque recreati
 3. **¿Cuánta cinta se necesita para acordonar el terreno y cuántos metros cuadrados de césped debemos sembrar?** $\rightarrow$ Diferenciamos **longitud (perímetro) de superficie (área)** y sus unidades de medida.
 4. **¿Cómo transformamos los planos dibujados en una hoja de papel (2D) en las cajas de empaque y quioscos reales (3D)?** $\rightarrow$ Comprendemos los **desarrollos planos de cuerpos geométricos**.
 
-¡Acompáñanos a explorar estos conceptos mediante animaciones matemáticas interactivas!
-
 ---
 
 # Módulo 1: Sistemas de Referencia y Coordenadas en el Plano Cartesiano
@@ -108,13 +106,18 @@ La siguiente animación ilustra cómo se construye la cuadrícula cartesiana, c�
 #| fig-align: center
 
 from manim import *
+from IPython.display import Video
 import numpy as np
+
+config.quality = "low_quality"
+config.media_dir = "./media"
+config.verbosity = "ERROR"
 
 class PlanoCartesianoYPosicion(Scene):
     def construct(self):
         # 1. Título
         titulo = Text("1. Sistema de Referencia: El Plano Cartesiano", font_size=30, color="#00D2FF")
-        subtitulo = Text("Ubicación de puntos y figuras 2D mediante pares ordenados (x, y)", font_size=18, color="#FFD166")
+        subtitulo = Text("Ubicación de puntos y figuras 2D mediante coordenadas (x, y)", font_size=18, color="#FFD166")
         cabecera = VGroup(titulo, subtitulo).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_corner(UL, buff=0.4)
         self.play(Write(titulo), FadeIn(subtitulo), run_time=1.0)
 
@@ -167,6 +170,10 @@ class PlanoCartesianoYPosicion(Scene):
         lbl_fig = Text("Polígono 2D (4 vértices conectados)", font_size=18, color="#FFD166").to_corner(DL, buff=0.4)
         self.play(Create(poligono), Write(lbl_fig), run_time=1.2)
         self.wait(1.0)
+
+scene1 = PlanoCartesianoYPosicion()
+scene1.render()
+Video(scene1.renderer.file_writer.movie_file_path, embed=True, html_attributes="controls autoplay loop style='max-width: 100%; border-radius: 8px;'")
 ```
 
 ::: {.callout-tip}
@@ -266,6 +273,10 @@ class TransformacionesIsometricas(Scene):
         self.play(Write(banner_ref), Create(eje_espejo))
         self.play(TransformFromCopy(triangulo_orig, triangulo_ref), run_time=1.5)
         self.wait(1.0)
+
+scene2 = TransformacionesIsometricas()
+scene2.render()
+Video(scene2.renderer.file_writer.movie_file_path, embed=True, html_attributes="controls autoplay loop style='max-width: 100%; border-radius: 8px;'")
 ```
 
 ::: {.callout-tip}
@@ -380,6 +391,10 @@ class LongitudVsArea(Scene):
 
         self.play(LaggedStart(*[FadeIn(c, scale=0.3) for c in cuadritos], lag_ratio=0.06), run_time=1.5)
         self.wait(1.0)
+
+scene3 = LongitudVsArea()
+scene3.render()
+Video(scene3.renderer.file_writer.movie_file_path, embed=True, html_attributes="controls autoplay loop style='max-width: 100%; border-radius: 8px;'")
 ```
 
 ::: {.callout-tip}
@@ -477,6 +492,10 @@ class De2Da3DDesdoblamiento(ThreeDScene):
         self.begin_ambient_camera_rotation(rate=0.4)
         self.wait(2.5)
         self.stop_ambient_camera_rotation()
+
+scene4 = De2Da3DDesdoblamiento()
+scene4.render()
+Video(scene4.renderer.file_writer.movie_file_path, embed=True, html_attributes="controls autoplay loop style='max-width: 100%; border-radius: 8px;'")
 ```
 
 ---
